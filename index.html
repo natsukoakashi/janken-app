@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>じゃんけん</title>
+
+        <!-- CSS読み込み -->
+        <link rel="stylesheet" href="css/style.css" />
+
+        <!-- jQuery読み込み -->
+        <script src="js/jquery-3.7.1.min.js"></script>
+    </head>
+<body>
+<header>
+    <h1>じゃんけん</h1>
+</header>
+
+<main>
+    <div class="card">
+        <ul class="choices">
+            <li id="gu" class="choice-btn">✊ グー</li>
+            <li id="choki" class="choice-btn">✌️ チョキ</li>
+            <li id="pa" class="choice-btn">✋ パー</li>
+        </ul>
+        <div class="result-area">
+            <div>
+                コンピュータの手：「<span id="pc-hand">まだ選んでいません</span>」
+            </div>
+            <div id="result" class="result">手を選んでください</div>
+        </div>
+    </div>
+</main>
+
+<script>
+// じゃんけんアプリ概要 -----------------------------------------------
+// 
+// 【基本機能】
+// - プレイヤーがグー・チョキ・パーのボタンをクリックできる
+// - コンピュータがランダムに手を選ぶ
+// - 勝敗を判定して結果を表示する
+// - 結果に応じて色分け表示する
+// 
+// 【画面構成】
+// - #gu ボタン: グーを選択
+// - #choki ボタン: チョキを選択  
+// - #pa ボタン: パーを選択
+// - #pc-hand: コンピュータの手を表示
+// - #result: 勝敗結果を表示
+// 
+// ---------------------------------------------------------------
+
+// じゃんけんゲームの JavaScript を記述してください！
+
+//グーは０、チョキは１、パーは２と指定する。グーボタンが押されるとコンピューターの手がランダムに選ばれるようにする。
+//クリックされた手とコンピューターのランダムの手によって判定結果が表示されるようにする。resultに
+//勝敗結果が表示されるようにする。
+//勝ちの場合:
+//自分（グー: 0） vs 相手（チョキ: 1）
+//自分（チョキ: 1） vs 相手（パー: 2）
+//自分（パー: 2） vs 相手（グー: 0）
+//それ以外: 負け。
+//同じ数字の時はあいこ
+
+$(document).ready(function () {
+    // 共通のじゃんけん処理
+    function janken(userHand) {
+        // 1. コンピュータの手をランダムに決める (0, 1, 2)
+        const pcHandNum = Math.floor(Math.random() * 3);
+        console.log("あなたの手(数字):", userHand);
+    　　console.log("PCの手(数字):", pcHandNum);
+        let pcHandText = "";
+
+        // 数字を文字に変換（表示用）
+        if (pcHandNum === 0) pcHandText = "グー";
+        if (pcHandNum === 1) pcHandText = "チョキ";
+        if (pcHandNum === 2) pcHandText = "パー";
+
+        // コンピュータの手を画面に表示
+        $("#pc-hand").text(pcHandText);
+
+        // 2. 勝敗判定
+        let result = "";
+
+        if (userHand === pcHandNum) {
+            // あいこの場合
+            result = "あいこです！";
+        } else if (
+            (userHand === 0 && pcHandNum === 1) || // 自分0 vs 相手1 (勝ち)
+            (userHand === 1 && pcHandNum === 2) || // 自分1 vs 相手2 (勝ち)
+            (userHand === 2 && pcHandNum === 0)    // 自分2 vs 相手0 (勝ち)
+        ) {
+            result = "あなたの勝ち！";
+        } else {
+            // それ以外は負け
+            result = "あなたの負け...";
+        }
+
+　　console.log("判定結果:", result);
+    console.log("------------------");  
+
+
+        // 3. 結果を画面に表示
+        $("#result").text(result);
+    }
+
+    // --- クリックイベント ---
+
+    // グー(0)をクリックした時
+    $("#gu").on("click", function () {
+        janken(0);
+    });
+
+    // チョキ(1)をクリックした時
+    $("#choki").on("click", function () {
+        janken(1);
+    });
+
+    // パー(2)をクリックした時
+    $("#pa").on("click", function () {
+        janken(2);
+    });
+});
+
+
+</script>
+</body>
+</html>
